@@ -1,0 +1,12 @@
+-- adding jar to lib
+add jar myHiveUDFs.jar;
+CREATE TEMPORARY FUNCTION FORMAT_GENRE as 'FORMAT_GENRE';
+
+-- loading movies 
+DROP TABLE IF EXISTS movies;
+CREATE TABLE movies (movieId STRING, title STRING, genre STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\;';
+LOAD DATA LOCAL INPATH '/tmp/HW_3_Data_bk/movies_new' INTO TABLE movies;
+
+-- applyiing FORMAT_GENRE
+INSERT OVERWRITE DIRECTORY '/user/hxr121830/HW3/out/9'
+SELECT title, FORMAT_GENRE(genre) from movies;

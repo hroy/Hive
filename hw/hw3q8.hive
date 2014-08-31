@@ -1,0 +1,15 @@
+DROP TABLE IF EXISTS movies_2009;
+CREATE TABLE movies_2009 (movieId STRING, title STRING, genre STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\;';
+
+DROP TABLE IF EXISTS movies_2010;
+CREATE TABLE movies_2010 (movieId STRING, title STRING, genre STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\;';
+
+DROP TABLE IF EXISTS movies_2011;
+CREATE TABLE movies_2011 (movieId STRING, title STRING, genre STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\;';
+
+-- multi table insert
+FROM movies_partition mp
+  INSERT OVERWRITE TABLE movies_2009 SELECT mp.movieId, mp.title, mp.genre WHERE mp.year = '2009'
+  INSERT OVERWRITE TABLE movies_2010 SELECT mp.movieId, mp.title, mp.genre WHERE mp.year = '2010'
+  INSERT OVERWRITE TABLE movies_2011 SELECT mp.movieId, mp.title, mp.genre WHERE mp.year = '2011';
+  

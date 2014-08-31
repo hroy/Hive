@@ -1,0 +1,11 @@
+-- creating tables with partitions
+DROP TABLE IF EXISTS movies_partition;
+CREATE TABLE movies_partition (movieId STRING, title STRING, genre STRING) partitioned by (year STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\;';
+
+-- loading data
+LOAD DATA LOCAL INPATH '/tmp/HW_3_Data_bk/partition/2009' INTO TABLE movies_partition PARTITION (year = '2009');
+LOAD DATA LOCAL INPATH '/tmp/HW_3_Data_bk/partition/2010' INTO TABLE movies_partition PARTITION (year = '2010');
+LOAD DATA LOCAL INPATH '/tmp/HW_3_Data_bk/partition/2011' INTO TABLE movies_partition PARTITION (year = '2011');
+
+INSERT OVERWRITE DIRECTORY '/user/hxr121830/HW3/out/7'
+select *from movies_partition where year = '2009';
